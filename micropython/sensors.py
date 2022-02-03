@@ -85,7 +85,7 @@ async def update_sensors_data(data):
     data['hdc']['temperature'] = mid(readings_hdc_temperature)
 
 
-def collect_sensors_data(data, test=False):    
+async def collect_sensors_data(data, test=False):    
     while True:
         await update_sensors_data(data)
         if test:

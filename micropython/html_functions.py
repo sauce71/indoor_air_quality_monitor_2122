@@ -1,3 +1,14 @@
+async def naw_write_http_header(request, content_type='text/html'):
+    """
+    HTTP Header
+    Content types:
+    json: application/json
+    """
+    await request.write("HTTP/1.1 200 OK\r\n".format(content_type))
+    await request.write("Content-Type: {}\r\n\r\n")
+
+
+
 def render_template_string(s, **kwargs):
     h = s
     for k, v in kwargs.items():

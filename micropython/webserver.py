@@ -20,11 +20,11 @@ sta_if = connect()
 
 naw = Nanoweb()
 
-    data = dict(
-        bmp = dict(temperature=0, pressure=0),
-        ccs = dict(tvoc=0, eco2=0),
-        hdc = dict(temperature=0, humidity=0),
-        )
+data = dict(
+    bmp = dict(temperature=0, pressure=0),
+    ccs = dict(tvoc=0, eco2=0),
+    hdc = dict(temperature=0, humidity=0),
+    )
 
 gc.collect()
 
