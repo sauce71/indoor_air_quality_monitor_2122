@@ -63,8 +63,7 @@ async def update_sensors_data(data):
     if eco2:
         readings_ccs_tvoc.append(tvoc)
         readings_ccs_eco2.append(eco2)
-    uasyncio.sleep_ms(1)
-    
+   
     humidity, temperature = await read_hdc()
     readings_hdc_humidity.append(humidity)
     readings_hdc_temperature.append(temperature)

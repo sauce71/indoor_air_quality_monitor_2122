@@ -1,13 +1,13 @@
 import network
 
-ssid = 'VG3Data'
-password = 'Admin:1234'
+SSID = 'VG3Data'
+PASSWORD = 'Admin:1234'
 
 def connect():
     sta_if = network.WLAN(network.STA_IF)
     if not sta_if.isconnected():
         sta_if.active(True)
-        sta_if.connect(ssid, password)
+        sta_if.connect(SSID, PASSWORD)
 
         while sta_if.isconnected() == False:
           pass

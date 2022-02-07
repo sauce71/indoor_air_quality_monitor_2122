@@ -5,10 +5,11 @@ import uasyncio
 from nanoweb import Nanoweb
 import sensors
 from html_functions import naw_write_http_header, render_template
+from leds import blink
 
-sta_if = connect()
+sta_if = connect() # Kobler til trådløst nettverk
 
-naw = Nanoweb()
+naw = Nanoweb() # Lager en instans av Nanoweb
 
 data = dict(
     bmp = dict(temperature=0, pressure=0),
@@ -38,6 +39,7 @@ def api_data(request):
 
 
 loop = uasyncio.get_event_loop()
+#loop.create_task(blink())
 loop.create_task(sensors.collect_sensors_data(data, True))
 loop.create_task(naw.run())
 

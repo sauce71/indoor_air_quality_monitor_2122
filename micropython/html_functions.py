@@ -30,7 +30,7 @@ def test():
             temperature_hdc='99',
             humidity='43',
         )
-    print(s)
+    #print(s)
 
 if __name__ == '__main__':
     test()
