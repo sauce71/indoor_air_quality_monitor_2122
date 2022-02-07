@@ -19,30 +19,31 @@ readings_ccs_eco2 = [0,] # Initaliserer med en 0 verdi og sjekker at det ikke er
 readings_hdc_humidity = []
 readings_hdc_temperature = []
 
-def read_bmp():
+async def read_bmp():
     temperature = bmp.read_temperature() / 100
     pressure = bmp.read_pressure() / 25600
     return temperature, pressure
 
 
-def read_ccs():
+async def read_ccs():
     if ccs.data_ready():
         tvoc = ccs.tVOC
         eco2 = ccs.eCO2
         return tvoc, eco2
     else:
         return 0, 0
-
-def read_hdc():
+    
+    
+async def read_hdc():
     humidity = hdc.read_humidity()
     temperature = hdc.read_temperature(celsius=True)
     return humidity, temperature
 
-def pop0(l):
+def _pop0(l):
     if len(l) >= 60:
         l.pop(0)
 
-def mid(l):
+def _mid(l):
     return sorted(l)[len(l)//2]
     
 
@@ -54,35 +55,33 @@ async def update_sensors_data(data):
     global readings_hdc_humidity
     global readings_hdc_temperature
     
-    temperature, pressure = read_bmp()
+    temperature, pressure = await read_bmp()
     readings_bmp_pressure.append(pressure)
     readings_bmp_temperature.append(temperature)
-    uasyncio.sleep_ms(1)
-    
-    tvoc, eco2 = read_ccs()
+  
+    tvoc, eco2 = await read_ccs()
     if eco2:
         readings_ccs_tvoc.append(tvoc)
         readings_ccs_eco2.append(eco2)
     uasyncio.sleep_ms(1)
     
-    humidity, temperature = read_hdc()
+    humidity, temperature = await read_hdc()
     readings_hdc_humidity.append(humidity)
     readings_hdc_temperature.append(temperature)
-    uasyncio.sleep_ms(1)
-
-    pop0(readings_bmp_temperature)
-    pop0(readings_bmp_pressure)
-    pop0(readings_ccs_tvoc)
-    pop0(readings_ccs_eco2)
-    pop0(readings_hdc_humidity)
-    pop0(readings_hdc_temperature)
+ 
+    _pop0(readings_bmp_temperature)
+    _pop0(readings_bmp_pressure)
+    _pop0(readings_ccs_tvoc)
+    _pop0(readings_ccs_eco2)
+    _pop0(readings_hdc_humidity)
+    _pop0(readings_hdc_temperature)
      
-    data['bmp']['temperature'] = mid(readings_bmp_temperature)
-    data['bmp']['pressure'] = mid(readings_bmp_pressure)
-    data['ccs']['tvoc'] = mid(readings_ccs_tvoc)
-    data['ccs']['eco2'] = mid(readings_ccs_eco2)
-    data['hdc']['humidity'] = mid(readings_hdc_humidity)
-    data['hdc']['temperature'] = mid(readings_hdc_temperature)
+    data['bmp']['temperature'] = _mid(readings_bmp_temperature)
+    data['bmp']['pressure'] = _mid(readings_bmp_pressure)
+    data['ccs']['tvoc'] = _mid(readings_ccs_tvoc)
+    data['ccs']['eco2'] = _mid(readings_ccs_eco2)
+    data['hdc']['humidity'] = _mid(readings_hdc_humidity)
+    data['hdc']['temperature'] = _mid(readings_hdc_temperature)
 
 
 async def collect_sensors_data(data, test=False):    
@@ -90,9 +89,8 @@ async def collect_sensors_data(data, test=False):
         await update_sensors_data(data)
         if test:
             print(data)
-            #print(readings_ccs_eco2)
-        uasyncio.sleep_ms(1000)
-        
+    
+        await uasyncio.sleep_ms(5000)
 
 def test():
     data = dict(
@@ -104,5 +102,6 @@ def test():
     loop.create_task(collect_sensors_data(data, True))
     loop.run_forever()
 
-#test()
+if __name__ == '__main__':
+    test()
     

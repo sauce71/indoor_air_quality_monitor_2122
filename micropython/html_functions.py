@@ -4,8 +4,8 @@ async def naw_write_http_header(request, content_type='text/html'):
     Content types:
     json: application/json
     """
-    await request.write("HTTP/1.1 200 OK\r\n".format(content_type))
-    await request.write("Content-Type: {}\r\n\r\n")
+    await request.write("HTTP/1.1 200 OK\r\n")
+    await request.write("Content-Type: {}\r\n\r\n".format(content_type))
 
 
 
@@ -13,7 +13,6 @@ def render_template_string(s, **kwargs):
     h = s
     for k, v in kwargs.items():
         h = h.replace('{{ ' + str(k) + ' }}', v)
-        print(k,v)
     return h
 
 def render_template(template, **kwargs):
@@ -33,6 +32,8 @@ def test():
         )
     print(s)
 
-test()
+if __name__ == '__main__':
+    test()
+    
         
     
