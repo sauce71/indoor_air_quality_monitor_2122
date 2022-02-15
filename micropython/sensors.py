@@ -7,7 +7,7 @@ from CCS811 import CCS811
 from hdc1080 import HDC1080
 
 
-i2c = I2C(1, scl=Pin(22), sda=Pin(21))
+i2c = I2C(scl=Pin(22), sda=Pin(21))
 bmp = BME280(i2c=i2c)
 ccs = CCS811(i2c=i2c, addr=90)
 hdc = HDC1080(i2c=i2c)
