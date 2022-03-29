@@ -6,7 +6,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
    print('Request for index page received')
-   return render_template('index.html')
+   ip = request.remote_addr
+   return render_template('index.html', **locals())
 
 @app.route('/test')
 def test():
